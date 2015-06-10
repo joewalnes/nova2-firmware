@@ -259,20 +259,18 @@ The device should appear as an HID Keyboard. The device can then send the "multi
 * http://www.embeda.com.tw/ucxpresso/?article=2-2-make-your-own-camera-shutter
 
 
-### 4. Nova service
+### 4. Nova service [0xEFF0]
 
-The Nova Service can be used by the custom Nova app installed on phone. It offers the most level of control over the Nova device.
+The Nova Service can be used by the custom Nova app installed on phone. It offers the most level of control over the Nova device. The Service UUID is `EFF0`.
 
 #### Nova GATT characteristics
 
-| Name                     | Operations | Description                                                             |
-| ------------------------ | ---------- | ------------------------------------------------------------------------|
-| Commands: App to Device  | WRITE      | For sending commands (see below) from App to device                     |
-| Commands: Device to App  | NOTIFY     | For sending commands (see below) from device to App                     |
-| Flash defaults           | READ/WRITE | Reads or writes user's flash settings used when triggering using button |
-| Counters                 | READ       | Reads usage counters from device                                        |
-
-*TODO: Determine assigned numbers for custom GATT services and characteristics.*
+| Name                     | Operations | UUID | Description                                                             |
+| ------------------------ | ---------- | ---- | ------------------------------------------------------------------------|
+| Commands: App to Device  | WRITE      | EFF1 | For sending commands (see below) from App to device                     |
+| Commands: Device to App  | NOTIFY     | EFF2 | For sending commands (see below) from device to App                     |
+| Flash defaults           | READ/WRITE | EFF3 | Reads or writes user's flash settings used when triggering using button |
+| Counters                 | READ       | EFF4 | Reads usage counters from device                                        |
 
 #### Commands
 
