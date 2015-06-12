@@ -200,7 +200,7 @@ void nova_on_button_pressdown(nova_t *nova)
  * Before calling this, apply sensible debounce protection to prevent
  * short (<10 milliseconds) presses.
  */
- void nova_on_button_release(nova_t *nova)
+void nova_on_button_release(nova_t *nova)
 {
   // If paired to custom app...
   if (nova->ble_app_connected) {
