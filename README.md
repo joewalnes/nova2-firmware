@@ -17,7 +17,7 @@ a physical trigger button.
 
 
 
-Modes of Operation
+Modes of Operation
 ------------------
 
 Nova V2 offers three modes of operation:
