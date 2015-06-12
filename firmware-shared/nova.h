@@ -153,17 +153,29 @@ typedef struct counters_t
  * For each command, the remote end will respond with a command of type=ACK
  * with the same id. The sender can use this to acknowledge the receiver has
  * processed the command.
+ *
+ * The encoded size of the command should be that of the header + the size of
+ * the body value from the union, if there is one.
+ * So, when type == ACK,     size = sizeof(app_command_header_t),
+ *     when type == PING,    size = sizeof(app_command_header_t),
+ *     when type == FLASH,   size = sizeof(app_command_header_t) + sizeof(flash_settings_t),
+ *     when type == OFF,     size = sizeof(app_command_header_t),
+ *     when type == TRIGGER, size = sizeof(app_command_header_t) + sizeof(flash_trigger_t))
  */
 typedef struct app_command_t
 {
-  /** Type of command. This must be the a value from app_command_type below. */
-  uint8_t type;
+  struct app_command_header_t
+  {
+    /** Type of command. This must be the a value from app_command_type below. */
+    uint8_t type;
 
-  /** Additional padding. Leave empty. Used to help byte alignment. */
-  uint8_t __pad;
+    /** Additional padding. Leave empty. Used to help byte alignment. */
+    uint8_t __pad;
 
-  /** Numeric id of command. This is used to tie the request to ack. */
-  cmd_id_t id;
+    /** Numeric id of command. This is used to tie the request to ack. */
+    cmd_id_t id;
+
+  } header;
 
   /** Optional body of command containing additional args for certain types. */
   union app_command_body_u

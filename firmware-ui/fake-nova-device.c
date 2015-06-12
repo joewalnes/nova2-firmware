@@ -60,16 +60,16 @@ void nova_load_flash_defaults(nova_t *nova, flash_defaults_t *flash_defaults)
 
 void nova_send_app_command(nova_t *nova, app_command_t *cmd)
 {
-  switch (cmd->type) {
+  switch (cmd->header.type) {
     case NOVA_CMD_TRIGGER:
       ui_log("   nova_send_app_command({type=TRIGGER, id=%u, is_pressed=%i})",
-          cmd->id, cmd->body.trigger.is_pressed);
+          cmd->header.id, cmd->body.trigger.is_pressed);
       break;
     case NOVA_CMD_ACK:
-      ui_log("   nova_send_app_command({type=ACK, id=%u})", cmd->id);
+      ui_log("   nova_send_app_command({type=ACK, id=%u})", cmd->header.id);
       break;
     default:
-      ui_log("   nova_send_app_command(UNEXPECTED!)", cmd->id);
+      ui_log("   nova_send_app_command(UNEXPECTED!)", cmd->header.id);
   }
 }
 

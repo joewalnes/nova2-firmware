@@ -170,8 +170,8 @@ void nova_on_button_pressdown(nova_t *nova)
   if (nova->ble_app_connected) {
 
     app_command_t cmd;
-    cmd.id = ++(nova->outbound_command_id);
-    cmd.type = NOVA_CMD_TRIGGER;
+    cmd.header.id = ++(nova->outbound_command_id);
+    cmd.header.type = NOVA_CMD_TRIGGER;
     cmd.body.trigger.is_pressed = true;
     nova_send_app_command(nova, &cmd);
 
@@ -210,14 +210,14 @@ void nova_on_button_release(nova_t *nova)
 
     // Tell app to take photo.
     app_command_t cmd;
-    cmd.id = ++(nova->outbound_command_id);
-    cmd.type = NOVA_CMD_TRIGGER;
+    cmd.header.id = ++(nova->outbound_command_id);
+    cmd.header.type = NOVA_CMD_TRIGGER;
     cmd.body.trigger.is_pressed = false;
     nova_send_app_command(nova, &cmd);
 
     // Prepare ACK handler (nova_on_app_command() below)
     // so it knows the app has taken the photo.
-    nova->command_id_for_trigger_ack = cmd.id;
+    nova->command_id_for_trigger_ack = cmd.header.id;
   }
 
   // If paired to native os...
@@ -249,17 +249,17 @@ void nova_on_app_command(nova_t *nova, app_command_t *cmd)
 {
   // Prepare "ACK" response (but don't send it yet).
   app_command_t ack;
-  ack.id = cmd->id;
-  ack.type = NOVA_CMD_ACK;
+  ack.header.id = cmd->header.id;
+  ack.header.type = NOVA_CMD_ACK;
 
   // Receive "PING" command...
-  if (cmd->type == NOVA_CMD_PING) {
+  if (cmd->header.type == NOVA_CMD_PING) {
     // Just respond with "ACK".
     nova_send_app_command(nova, &ack);
   }
 
   // Receive "FLASH" command...
-  else if (cmd->type == NOVA_CMD_FLASH) {
+  else if (cmd->header.type == NOVA_CMD_FLASH) {
     // Start the flash.
     flash_start(nova, &cmd->body.flash_settings);
 
@@ -272,7 +272,7 @@ void nova_on_app_command(nova_t *nova, app_command_t *cmd)
   }
 
   // Receive "OFF" command...
-  else if (cmd->type == NOVA_CMD_OFF) {
+  else if (cmd->header.type == NOVA_CMD_OFF) {
     // End flash,
     flash_end(nova);
 
@@ -281,10 +281,10 @@ void nova_on_app_command(nova_t *nova, app_command_t *cmd)
   }
 
   // Receive "ACK" response from request previously sent to app...
-  else if (cmd->type == NOVA_CMD_ACK) {
+  else if (cmd->header.type == NOVA_CMD_ACK) {
 
     // Response from trigger: app has completed photo so end_flash().
-    if (nova->command_id_for_trigger_ack == cmd->id) {
+    if (nova->command_id_for_trigger_ack == cmd->header.id) {
       flash_end(nova);
       nova->command_id_for_trigger_ack = 0;
     }

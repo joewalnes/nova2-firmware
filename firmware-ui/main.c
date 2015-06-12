@@ -92,9 +92,9 @@ int main(int argc, char **argv)
       case UI_ACTION_APP_PING:
         // Simulate PING from App.
         if (nova_is_ble_app_connected(nova)) {
-          cmd.type = NOVA_CMD_PING;
-          cmd.id = ++id;
-          ui_log("-> nova_on_app_command({type=PING, id=%u})", cmd.id);
+          cmd.header.type = NOVA_CMD_PING;
+          cmd.header.id = ++id;
+          ui_log("-> nova_on_app_command({type=PING, id=%u})", cmd.header.id);
           nova_on_app_command(nova, &cmd);
         }
         break;
@@ -102,13 +102,13 @@ int main(int argc, char **argv)
       case UI_ACTION_APP_FLASH:
         // Simulate FLASH from App.
         if (nova_is_ble_app_connected(nova)) {
-          cmd.type = NOVA_CMD_FLASH;
-          cmd.id = ++id;
+          cmd.header.type = NOVA_CMD_FLASH;
+          cmd.header.id = ++id;
           cmd.body.flash_settings.timeout = 5000;
           cmd.body.flash_settings.warm = 255;
           cmd.body.flash_settings.cool = 127;
           ui_log("-> nova_on_app_command({type=FLASH, id=%u, flash_settings={timeout=%u, warm=%u, cool=%u}})",
-              cmd.id, cmd.body.flash_settings.timeout, cmd.body.flash_settings.warm, cmd.body.flash_settings.cool);
+              cmd.header.id, cmd.body.flash_settings.timeout, cmd.body.flash_settings.warm, cmd.body.flash_settings.cool);
           nova_on_app_command(nova, &cmd);
         }
         break;
@@ -116,9 +116,9 @@ int main(int argc, char **argv)
       case UI_ACTION_APP_OFF:
         // Simulate OFF from app.
         if (nova_is_ble_app_connected(nova)) {
-          cmd.type = NOVA_CMD_OFF;
-          cmd.id = ++id;
-          ui_log("-> nova_on_app_command({type=OFF, id=%u})", cmd.id);
+          cmd.header.type = NOVA_CMD_OFF;
+          cmd.header.id = ++id;
+          ui_log("-> nova_on_app_command({type=OFF, id=%u})", cmd.header.id);
           nova_on_app_command(nova, &cmd);
         }
         break;
