@@ -139,9 +139,6 @@ typedef struct counters_t
   /** How many times the flash has been triggered via the a BLE message from Nova app. */
   uint32_t flash_remote_app;
 
-  /** Additional padding. Leave empty. Used to help byte alignment. */
-  uint32_t __pad;
-
 } counters_t;
 
 
